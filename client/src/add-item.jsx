@@ -1,3 +1,4 @@
+import logo from "./assets/logo.svg";
 import { allItems, singleItem } from "./all-items.jsx";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +7,12 @@ export default function AddItem() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [itemName, setItemName] = useState("");
   const [itemUrl, setItemUrl] = useState("");
-  const [condition, setCondition] = useState("");
-  const myRef = useRef(null);
+  const [condition, setCondition] = useState("Unknown");
+  const [description, setDescription] = useState("");
+  const formSection = useRef(null);
+  let descriptionRef = useRef(null);
+  const itemAddedSection = useRef(null);
+  const itemAddedMsg = useRef(null);
   const navigate = useNavigate();
 
   function handleSubmit(event) {
@@ -17,17 +22,31 @@ export default function AddItem() {
     newSingleItem.name = itemName;
     newSingleItem.url = itemUrl;
     newSingleItem.condition = condition;
+    newSingleItem.description = description;
+
     allItems.push(newSingleItem);
     console.log(newSingleItem);
     console.log(allItems);
-    const SuccessMsg = myRef.current;
-    SuccessMsg.style.display = "block";
+    formSection.current.style.display = "none";
+    itemAddedSection.current.style.display = "block";
+    itemAddedMsg.current.style.display = "block";
+    console.log(description);
+  }
+
+  function handleResetBtn() {
+    setItemName("");
+    setItemUrl("");
+    setCondition("");
+    setDescription("");
   }
 
   function handleAddBtn() {
     setItemName("");
     setItemUrl("");
     setCondition("");
+    formSection.current.style.display = "block";
+    descriptionRef.current.value = "";
+    itemAddedSection.current.style.display = "none";
   }
 
   function handleReturnBtn() {
@@ -36,26 +55,36 @@ export default function AddItem() {
 
   function goToLogin(event) {
     setIsLoggedIn(false);
-    setTimeout(() => navigate("/login"), 2000);
+    const hideBtn = event.target;
+    hideBtn.style.display = "none";
+    setTimeout(() => navigate("../auth/login"), 2000);
   }
 
   return (
     <>
-      <button type="button" onClick={goToLogin}>
-        Not Logged-In
-      </button>
+      <img src={logo} className="logo react" alt="Give Away logo" />
+
+      <section>
+        <button type="button" onClick={goToLogin}>
+          Not Logged-In
+        </button>
+      </section>
+
       {isLoggedIn ? (
-        <div>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="item-name">Item Name</label>
+        <section>
+          <form ref={formSection} onSubmit={handleSubmit}>
+            <label htmlFor="item_Name">Item Name:</label>
+            <br />
             <input
               type="text"
               id="item_Name"
-              name="item_name"
+              name="item_Name"
               onChange={(event) => setItemName(event.target.value)}
               value={itemName}
             ></input>
-            <label htmlFor="link">URL</label>
+            <br />
+            <label htmlFor="link">URL:</label>
+            <br />
             <input
               type="text"
               id="link"
@@ -63,36 +92,78 @@ export default function AddItem() {
               onChange={(event) => setItemUrl(event.target.value)}
               value={itemUrl}
             ></input>
+            <br />
 
-            <label htmlFor="condition">Condition</label>
+            <label htmlFor="condition">Condition:</label>
+            <br />
             <select
-              id="dropDown"
+              id="condition"
               name="condition"
               onChange={(event) => setCondition(event.target.value)}
               value={condition}
             >
+              <option value="Unknown">Select One Option</option>
               <option>New</option>
               <option>Refurbished</option>
               <option>Open Box</option>
               <option>Used</option>
               <option>Damaged</option>
             </select>
-
-            <button type="submit">Submit</button>
+            <section>
+              <label htmlFor="description">Description:</label>
+              <br />
+              <textarea
+                id="description"
+                name="description"
+                ref={descriptionRef}
+                rows="8"
+                cols="40"
+                placeholder="Type here your item description:"
+                onChange={(event) => setDescription(event.target.value)}
+              ></textarea>
+            </section>
+            <section>
+              {" "}
+              <button type="submit">Submit</button>
+              <button type="reset" onClick={handleResetBtn}>
+                Reset
+              </button>
+            </section>
           </form>
 
-          <div ref={myRef} style={{ display: "none" }}>
-            <h2 className="msg">you added a new item successfully!!</h2>
+          <section ref={itemAddedSection} style={{ display: "none" }}>
+            <h2 className="msg" ref={itemAddedMsg}>
+              you added a new item successfully!!
+            </h2>
+
+            <section>
+              <figure>
+                <img
+                  src={itemUrl}
+                  alt={itemName}
+                  width="300"
+                  height="300"
+                ></img>
+                <figcaption>
+                  <i>{itemName}</i>
+                </figcaption>
+                <p>Description: {description}</p>
+                <p>
+                  Condition: <b>{condition}</b>
+                </p>
+              </figure>
+            </section>
+
             <button type="button" onClick={handleAddBtn}>
               Add Another Item
             </button>
             <button type="button" onClick={handleReturnBtn}>
               Return To Main Page
             </button>
-          </div>
-        </div>
+          </section>
+        </section>
       ) : (
-        <h2>Log-in to add Item</h2>
+        <h2>Log-in to add Item!</h2>
       )}
     </>
   );

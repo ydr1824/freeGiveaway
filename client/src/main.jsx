@@ -5,9 +5,11 @@ import App from "./App.jsx";
 import ErrorPage from "./error-page.jsx";
 import ItemDetails from "./item-details.jsx";
 import AddItem from "./add-item.jsx";
-import Login from "./log-in.jsx";
-import SignUp from "./sign-up.jsx";
+import { Login } from "./login.jsx";
+import { SignUp } from "./sign-up.jsx";
 import "./index.css";
+import MyCart from "./my-cart.jsx";
+import Item from "./item.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,7 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/details",
+    path: "/item-details/:id",
     element: <ItemDetails />,
   },
 
@@ -26,11 +28,19 @@ const router = createBrowserRouter([
     element: <AddItem />,
   },
 
-  { path: "/login", element: <Login /> },
+  {
+    path: "auth/login",
+    element: <Login />,
+  },
 
   {
     path: "/sign-up",
     element: <SignUp />,
+  },
+
+  {
+    path: "/my-cart",
+    element: <MyCart />,
   },
 ]);
 

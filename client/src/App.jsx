@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
+import logo from "./assets/logo.svg";
 import "./App.css";
 import { Link } from "react-router-dom";
 import { allItems } from "./all-items.jsx";
@@ -12,15 +12,18 @@ function App() {
   return (
     <>
       <div>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <img src={logo} className="logo react" alt="Give Away logo" />
       </div>
+
       <h1>WELCOME TO "GIVE-AWAY"!!!</h1>
 
-      <button type="button" onClick={()=> navigate("/login")}>Login</button>
+      <button type="button" onClick={() => navigate("auth/login")}>
+        Login
+      </button>
 
-      <button type="button" onClick={()=> navigate("/sign-up")}>Create Account</button>
+      <button type="button" onClick={() => navigate("/sign-up")}>
+        Create Account
+      </button>
 
       <h2>Our Hot Deals!!</h2>
 
