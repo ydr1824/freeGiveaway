@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 
-const phone = /^1?[0-9]{3}-?[0-9]{3}-?[0-9]{4}$/
+const phone = /^1?-?[0-9]{3}-?[0-9]{3}-?[0-9]{4}$/
+const email = /^[a-z0-9]+@[a-z0-9]+\.[a-z]{2,3}(\.[a-z]{0,2})?$/i
 
 export const SignupSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -11,13 +12,8 @@ export const SignupSchema = Yup.object().shape({
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('This field is Required!'),
-    email: Yup.string().email('Invalid email').required('This field is Required!'),
-    // phone: Yup.number("Must be a Number")
-    //     .typeError("That doesn't look like a phone number")
-    //     .positive("A phone number can't start with a minus")
-    //     .integer("A phone number can't include a decimal point")
-    //     .min(10)
-    //     .required('A phone number is required'),
+    email: Yup.string().matches(email,'Invalid email')
+    .required('This field is Required!'),
     phone: Yup.string()
     .matches(phone,'not a valid phone number')
     .required('A Phone Number Is Required!'),
