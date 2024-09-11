@@ -1,4 +1,4 @@
-# My Awesome App
+# FREE GIVEAWAY APP
 
 This is a Node.js application that interacts with a PostgreSQL database using the Drizzle ORM.
 
@@ -10,9 +10,6 @@ This is a Node.js application that interacts with a PostgreSQL database using th
 ## Installation
 
 1. Clone the repository:
-
-git clone https://github.com/your-username/your-repo.git
-
 
 
 2. Navigate to the project directory:
@@ -26,13 +23,11 @@ cd your-repo
 npm install
 
 
-
 ## Environment Setup
 
 1. Create a `.env` file in the root of the project:
 
 touch .env
-
 
 
 2. Open the `.env` file and add the following environment variables:
@@ -49,11 +44,6 @@ Alternatively, you can use the following variables , but you will eed to adjust 
 
 
 
-
-
-
-
-
 3. (Optional) Configure the debugger in the `.vscode/launch.json` file:
 
 ```json
@@ -65,6 +55,7 @@ Alternatively, you can use the following variables , but you will eed to adjust 
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}/server/app.js",
+            "preLaunchTask": "Copy TS to JS", // Reference to the task
             "env": {
                 "PORT": "3001",
                 "NODE_ENV": "development",
@@ -73,7 +64,10 @@ Alternatively, you can use the following variables , but you will eed to adjust 
         }
     ]
 }
+
 ```
+
+
 Running the Application
 Start the development server:
 
@@ -93,7 +87,7 @@ npm run lint: Lints the codebase using ESLint.
 Project Structure
 The project structure is as follows: (there was already some changes)
 
-
+```
 your-repo/
 ├── models/
 │   ├── conditions.js
@@ -107,6 +101,9 @@ your-repo/
 ├── .env
 └── .vscode/
     └── launch.json
+```
+
+
 The models/ directory contains the Drizzle ORM models for the various database entities.
 The db.js file sets up the database connection using the Drizzle ORM.
 The app.js file is the entry point of the application.
