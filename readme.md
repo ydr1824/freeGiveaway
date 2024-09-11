@@ -1,3 +1,8 @@
+#NOTE
+there was a lot of changes
+currently I tested `localhost:3001/items/` GET for listing the items & POST to post an item (I used {"name":"name test","description":"test","conditionId":"1","categoryId":"1","userId":"1"})
+
+
 # FREE GIVEAWAY APP
 
 This is a Node.js application that interacts with a PostgreSQL database using the Drizzle ORM.
