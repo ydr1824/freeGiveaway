@@ -1,0 +1,9 @@
+# Ignore VSCode launch configurations
+.vscode/*
+#!.vscode/tasks.json
+
+# Ignore environment variable files
+server/.env
+
+# Ignore Node.js modules
+server/node_modules/
