@@ -1,6 +1,6 @@
 # Ignore VSCode launch configurations
 .vscode/*
-#!.vscode/tasks.json
+!.vscode/tasks.json
 
 # Ignore environment variable files
 server/.env
