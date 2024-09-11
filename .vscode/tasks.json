@@ -6,7 +6,7 @@
             "type": "shell",
             "command": "node",
             "args": [
-                "${workspaceFolder}/copySchema.js"
+                "${workspaceFolder}/copySchema.js" 
             ],
             "problemMatcher": [],
             "group": "build"
