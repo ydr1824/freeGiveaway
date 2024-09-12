@@ -1,49 +1,44 @@
-import { useState, useEffect } from "react";
-import logo from "./assets/logo.svg";
-import "./App.css";
-import { Link } from "react-router-dom";
-import { allItems } from "./all-items.jsx";
-import Item from "./item.jsx";
-import { useNavigate } from "react-router-dom";
+
+import { createContext, useState } from 'react'
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
+import './App.css'
+import { SignUp } from './SignUp'
+import { Login } from './Login'
+import { MainPage } from './MainPage'
+
+
+export const AuthContext = createContext(null)
+
 
 function App() {
-  const navigate = useNavigate();
+  const [currentuser, setCurrentUser] = useState()
+  function setUser(user){
+    setCurrentUser(user)
+  }
+
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <MainPage setCurrentUser={setCurrentUser}/>
+    },
+    {
+      path : '/sign-up',
+      element: <SignUp setCurrentUser={setCurrentUser}/>
+    },
+    {
+      path : '/login',
+      element: <Login setCurrentUser={setCurrentUser}/>
+    }
+  ])
 
   return (
     <>
-      <div>
-        <img src={logo} className="logo react" alt="Give Away logo" />
-      </div>
-
-      <h1>WELCOME TO "GIVE-AWAY"!!!</h1>
-
-      <button type="button" onClick={() => navigate("auth/login")}>
-        Login
-      </button>
-
-      <button type="button" onClick={() => navigate("/sign-up")}>
-        Create Account
-      </button>
-
-      <h2>Our Hot Deals!!</h2>
-
-      {allItems.map((item) => (
-        <Item
-          key={item.id}
-          itemId={item.id}
-          name={item.name}
-          img={item.url}
-          condition={item.condition}
-        ></Item>
-      ))}
-      <section>
-        <Link to={"/add-item"} className="link">
-          <button type="button">Add New Item</button>
-        </Link>
-      </section>
-      <a href="#top">Return to top of the page</a>
+    <AuthContext.Provider value={currentuser}>
+      <RouterProvider router={router}/>
+    </AuthContext.Provider>
+      
     </>
-  );
+  )
 }
 
-export default App;
+export default App

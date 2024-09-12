@@ -3,6 +3,10 @@ import { allItems, singleItem } from "./all-items.jsx";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useFormik } from "formik";
+import { itemSchema } from "./ItemSchema.js";
+
+
 export default function AddItem() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [itemName, setItemName] = useState("");
@@ -14,6 +18,20 @@ export default function AddItem() {
   const itemAddedSection = useRef(null);
   const itemAddedMsg = useRef(null);
   const navigate = useNavigate();
+
+
+  const formik = useFormik({
+    initialValues: {
+        itemName: '',
+        itemLink: '',
+        condition: '',
+        description: ''
+    },
+    validationSchema: itemSchema,
+    onSubmit: handleSubmit
+  })
+
+
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -72,16 +90,22 @@ export default function AddItem() {
 
       {isLoggedIn ? (
         <section>
-          <form ref={formSection} onSubmit={handleSubmit}>
+
+          <form ref={formSection} onSubmit={formik.handleSubmit}>
+
             <label htmlFor="item_Name">Item Name:</label>
             <br />
             <input
               type="text"
               id="item_Name"
               name="item_Name"
-              onChange={(event) => setItemName(event.target.value)}
-              value={itemName}
+
+              onChange={formik.handleChange}
+              value={formik.values.itemName}
+              onBlur={formik.handleBlur}
             ></input>
+            <p className="err-msg">{formik.touched.itemName ? formik.errors.itemName : ""} </p>
+
             <br />
             <label htmlFor="link">URL:</label>
             <br />
@@ -89,9 +113,14 @@ export default function AddItem() {
               type="text"
               id="link"
               name="link"
-              onChange={(event) => setItemUrl(event.target.value)}
-              value={itemUrl}
+
+              onChange={formik.handleChange}
+              value={formik.values.itemLink}
+              onBlur={formik.handleBlur}
             ></input>
+            <p className="err-msg">{formik.touched.itemLink? formik.errors.itemLink : ""} </p>
+
+
             <br />
 
             <label htmlFor="condition">Condition:</label>
@@ -99,8 +128,11 @@ export default function AddItem() {
             <select
               id="condition"
               name="condition"
-              onChange={(event) => setCondition(event.target.value)}
-              value={condition}
+
+              onChange={formik.handleChange}
+              value={formik.values.condition}
+              onBlur={formik.handleBlur}
+
             >
               <option value="Unknown">Select One Option</option>
               <option>New</option>
@@ -109,18 +141,26 @@ export default function AddItem() {
               <option>Used</option>
               <option>Damaged</option>
             </select>
+
+            <p className="err-msg">{formik.touched.condition? formik.errors.condition: ""} </p>
+
             <section>
               <label htmlFor="description">Description:</label>
               <br />
               <textarea
                 id="description"
                 name="description"
-                ref={descriptionRef}
+
+                //ref={descriptionRef}
+                value={formik.values.description}
                 rows="8"
                 cols="40"
                 placeholder="Type here your item description:"
-                onChange={(event) => setDescription(event.target.value)}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               ></textarea>
+              <p className="err-msg">{formik.touched.description? formik.errors.description: ""} </p>
+
             </section>
             <section>
               {" "}
@@ -168,3 +208,4 @@ export default function AddItem() {
     </>
   );
 }
+
