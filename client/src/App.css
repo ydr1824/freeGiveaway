@@ -6,7 +6,9 @@
 }
 
 .logo {
+
   height: 6em;
+
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
@@ -40,7 +42,9 @@
 .read-the-docs {
   color: #888;
 }
+
 .sign-up-div{
   border: 2px;
   border-color: red;
 }
+
