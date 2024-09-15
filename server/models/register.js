@@ -2,6 +2,7 @@ import { db, users } from '../db.js';
 import { hashPW, signJWT, verifyJWT } from '../middlewares.js';
 export async function createUser(userData, res) { // Add res as a parameter
   const { email, password, firstName, lastName, address, phone } = userData;
+  console.log(userData)
   const name = `${firstName} ${lastName}`;
   
   try {

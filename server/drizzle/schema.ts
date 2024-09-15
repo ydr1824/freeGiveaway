@@ -46,8 +46,7 @@ export const items = pgTable("items", {
 	id: serial("id").primaryKey().notNull(),
 	name: varchar("name", { length: 255 }).notNull(),
 	description: text("description").notNull(),
-	//condition_id: integer("condition_id"),
-	condition_id: varchar("condition_id", { length: 255 }),
+	condition_id: integer("condition_id"),
 	category_id: integer("category_id"),
 	user_id: integer("user_id").notNull(), // Ensure this is present
 	image_url: varchar("image_url", { length: 255 }),
@@ -59,11 +58,11 @@ export const items = pgTable("items", {
 },
 	(table) => {
 		return {
-			/*  items_condition_id_fkey: foreignKey({
-				  columns: [table.condition_id],
-				  foreignColumns: [conditions.id],
-				  name: "items_condition_id_fkey"
-			  }).onDelete("cascade"),*/
+		items_condition_id_fkey: foreignKey({
+			columns: [table.condition_id],
+			foreignColumns: [conditions.id],
+			name: "items_condition_id_fkey"
+		}).onDelete("cascade"),
 			items_category_id_fkey: foreignKey({
 				columns: [table.category_id],
 				foreignColumns: [categories.id],

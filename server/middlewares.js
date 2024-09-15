@@ -67,10 +67,21 @@ function requestTime(req, res, next) {
     req.requestTime = Date.now();
     next();
 }
-
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'null',
+    // Add more origins as necessary
+];
 // CORS Middleware
 const corsMiddleware = (req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173/');
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        console.log(origin , "allowed")
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    } else {
+        console.log(origin , "not allowed")
+    }
     res.setHeader('Access-Control-Allow-Methods', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
     res.setHeader('Access-Control-Allow-Credentials', true);
