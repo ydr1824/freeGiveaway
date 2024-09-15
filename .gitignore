@@ -10,12 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+
 *.local
 
-server/index.js
-server/items.js 
-server/package-lock.json
-server/package.json
 
 # Editor directories and files
 .vscode/*
@@ -27,3 +24,12 @@ server/package.json
 *.njsproj
 *.sln
 *.sw?
+# Ignore VSCode launch configurations
+.vscode/*
+!.vscode/tasks.json
+
+# Ignore environment variable files
+server/.env
+
+# Ignore Node.js modules
+server/node_modules/

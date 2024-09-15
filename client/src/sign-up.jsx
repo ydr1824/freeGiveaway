@@ -1,10 +1,17 @@
 import login_logo from "./assets/login.svg";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { SignupSchema } from "./sign-up-schema.js";
 
-export function SignUp() {
+export function SignUp(props) {
   const navigate = useNavigate();
+
+  function ChangePageTitle() {
+    document.title = props.title;
+  }
+
+  useEffect(() => ChangePageTitle, []);
 
   const formik = useFormik({
     initialValues: {
@@ -21,7 +28,9 @@ export function SignUp() {
   });
 
   async function signUpHandler(values) {
-    const res = await fetch(".../users/create", {
+    console.log("done")
+
+    /*const res = await fetch("http://localhost:3000/users", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -37,20 +46,31 @@ export function SignUp() {
     });
     const result = await res.json();
     console.log(result);
-
-    navigate("/login");
+   */
+    navigate("/");
   }
 
   return (
     <>
-      <img src={login_logo} className="logo react" alt="login logo" />
+      <section>
+        <h1>THE SIGN-UP PAGE!</h1>
+        <img src={login_logo} className="logo react" alt="login logo" />
+      </section>
+
+      <section>
+        <h3>
+          Please fill out the fields below to Create Account on Give-Away:
+        </h3>
+      </section>
 
       <div className="sign-up-div">
-        <h1>The Sign-Up Page!</h1>
-        <form className="sign-up-form" onSubmit={formik.handleSubmit}>
+        <form
+          className="sign-up-form"
+          onSubmit={formik.handleSubmit}
+        >
           <section className="sign-up-form__name">
             <label htmlFor="firstName"> First Name </label>
-            <br/>
+            <br />
             <input
               value={formik.values.firstName}
               id="firstName"
@@ -64,7 +84,7 @@ export function SignUp() {
             </p>
 
             <label htmlFor="lastName"> Last Name</label>
-            <br/>
+            <br />
             <input
               value={formik.values.lastName}
               id="lastName"
@@ -79,7 +99,7 @@ export function SignUp() {
           </section>
           <section className="sign-up-form__email">
             <label htmlFor="email"> Email</label>
-            <br/>
+            <br />
             <input
               value={formik.values.email}
               id="email"
@@ -94,7 +114,7 @@ export function SignUp() {
           </section>
           <section className="sign-up-form__phone">
             <label htmlFor="phone"> Phone</label>
-            <br/>
+            <br />
             <input
               value={formik.values.phone}
               id="phone"
@@ -121,7 +141,7 @@ export function SignUp() {
                     </section> */}
           <section className="sign-up-form__password">
             <label htmlFor="password"> Password</label>
-            <br/>
+            <br />
             <input
               value={formik.values.password}
               id="password"
@@ -136,7 +156,7 @@ export function SignUp() {
           </section>
           <section className="sign-up-form__confirmPassword">
             <label htmlFor="confirmPassword">Confirm Password</label>
-            <br/>
+            <br />
             <input
               value={formik.values.confirmPassword}
               id="confirmPassword"

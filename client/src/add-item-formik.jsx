@@ -2,8 +2,10 @@ import logo from "./assets/logo.svg";
 import { allItems, singleItem } from "./all-items.jsx";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { itemSchema } from "./item-schema.js";
 
-export default function AddItem(props) {
+export default function AddItemFormik(props) {
   function ChangePageTitle() {
     document.title = props.title;
   }
@@ -21,32 +23,85 @@ export default function AddItem(props) {
   const itemAddedSection = useRef(null);
   const itemAddedMsg = useRef(null);
   const navigate = useNavigate();
+  const newSingleItem = singleItem;
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const newSingleItem = singleItem;
+  const formik = useFormik({
+    initialValues: {
+      itemName: "",
+      itemLink: "",
+      condition: "",
+      description: "",
+    },
+    validationSchema: itemSchema,
+    onSubmit: submitHandler,
+  });
+  /**
+   name,
+    description,
+    long_description: longDescription,
+    image_url: urlFileName,
+    category_id: categoryId,
+    condition_id: conditionId,
+    user_id: userId */
+
+  async function postItem(newSingleItem) {
+    console.log(newSingleItem);
+    try {
+      const res = await fetch("http://localhost:3000/items/", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          
+          name: newSingleItem.name,
+          description: newSingleItem.description,
+        
+          image_url: newSingleItem.url,
+          category_id:2,
+          condition_id: 1,
+          user_id: 1,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Network response was not ok " + res.statusText);
+      }
+
+      const result = await res.json();
+      console.log(result);
+    } catch (e) {
+      console.error("this is an error:", e);
+    }
+  }
+
+  function submitHandler(values, { resetForm }) {
+    /*event.preventDefault();
+    setItemName(formik.values.itemName);
+    setItemUrl(formik.values.itemLink);
+    setCondition(formik.values.condition);
+    setDescription(formik.values.description);
+  */
+
     newSingleItem.id = allItems.length + 1;
-    newSingleItem.name = itemName;
-    newSingleItem.url = itemUrl;
-    newSingleItem.condition = condition;
-    newSingleItem.description = description;
+    newSingleItem.name = formik.values.itemName;
+    newSingleItem.url = formik.values.itemLink;
+    newSingleItem.condition = formik.values.condition;
+    newSingleItem.description = formik.values.description;
 
     allItems.push(newSingleItem);
     console.log(newSingleItem);
     console.log(allItems);
-    
+
     pageMsg.current.style.display = "none";
     formSection.current.style.display = "none";
     itemAddedSection.current.style.display = "block";
     itemAddedMsg.current.style.display = "block";
     console.log(description);
-  }
 
-  function handleResetBtn() {
-    setItemName("");
-    setItemUrl("");
-    setCondition("");
-    setDescription("");
+    resetForm();
+    postItem(newSingleItem);
   }
 
   function handleAddBtn() {
@@ -89,26 +144,35 @@ export default function AddItem(props) {
 
       {isLoggedIn ? (
         <section>
-          <form ref={formSection} onSubmit={handleSubmit}>
-            <label htmlFor="item_Name">Item Name:</label>
+          <form ref={formSection} onSubmit={formik.handleSubmit}>
+            <label htmlFor="itemName">Item Name:</label>
             <br />
             <input
               type="text"
-              id="item_Name"
-              name="item_Name"
-              onChange={(event) => setItemName(event.target.value)}
-              value={itemName}
+              id="itemName"
+              name="itemName"
+              onChange={formik.handleChange}
+              value={formik.values.itemName}
+              onBlur={formik.handleBlur}
             ></input>
+            <p className="err-msg">
+              {formik.touched.itemName ? formik.errors.itemName : ""}{" "}
+            </p>
             <br />
-            <label htmlFor="link">URL To Item Image:</label>
+            <label htmlFor="itemLink">URL:</label>
             <br />
             <input
               type="text"
-              id="link"
-              name="link"
-              onChange={(event) => setItemUrl(event.target.value)}
-              value={itemUrl}
+              id="itemLink"
+              name="itemLink"
+              onChange={formik.handleChange}
+              value={formik.values.itemLink}
+              onBlur={formik.handleBlur}
             ></input>
+            <p className="err-msg">
+              {formik.touched.itemLink ? formik.errors.itemLink : ""}{" "}
+            </p>
+
             <br />
 
             <label htmlFor="condition">Condition:</label>
@@ -116,8 +180,9 @@ export default function AddItem(props) {
             <select
               id="condition"
               name="condition"
-              onChange={(event) => setCondition(event.target.value)}
-              value={condition}
+              onChange={formik.handleChange}
+              value={formik.values.condition}
+              onBlur={formik.handleBlur}
             >
               <option value="Unknown">Select One Option</option>
               <option>New</option>
@@ -126,6 +191,9 @@ export default function AddItem(props) {
               <option>Used</option>
               <option>Damaged</option>
             </select>
+            <p className="err-msg">
+              {formik.touched.condition ? formik.errors.condition : ""}{" "}
+            </p>
             <section>
               <label htmlFor="description">Description:</label>
               <br />
@@ -133,16 +201,21 @@ export default function AddItem(props) {
                 id="description"
                 name="description"
                 ref={descriptionRef}
+                value={formik.values.description}
                 rows="8"
                 cols="40"
                 placeholder="Type here your item description:"
-                onChange={(event) => setDescription(event.target.value)}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               ></textarea>
+              <p className="err-msg">
+                {formik.touched.description ? formik.errors.description : ""}{" "}
+              </p>
             </section>
             <section>
               {" "}
               <button type="submit">Submit</button>
-              <button type="reset" onClick={handleResetBtn}>
+              <button type="reset" onClick={() => formik.resetForm()}>
                 Reset
               </button>
             </section>
@@ -156,21 +229,17 @@ export default function AddItem(props) {
             <section>
               <figure>
                 <img
-                  src={itemUrl}
-                  alt={itemName}
+                  src={newSingleItem.url}
+                  alt={newSingleItem.name}
                   width="300"
                   height="300"
                 ></img>
                 <figcaption>
-                  <i>{itemName}</i>
+                  <i>{newSingleItem.name}</i>
                 </figcaption>
+                <p>Description: {newSingleItem.description}</p>
                 <p>
-                  {" "}
-                  <b>Description:</b>{" "}
-                </p>
-                <p>{description}</p>
-                <p>
-                  Condition: <b>{condition}</b>
+                  Condition: <b>{newSingleItem.condition}</b>
                 </p>
               </figure>
             </section>

@@ -1,6 +1,13 @@
 import { useRouteError } from "react-router-dom";
+import { useEffect } from "react";
 
-export default function ErrorPage() {
+export default function ErrorPage(props) {
+  function ChangePageTitle() {
+    document.title = props.title;
+  }
+
+  useEffect(() => ChangePageTitle, []);
+
   const error = useRouteError();
   console.error(error);
 

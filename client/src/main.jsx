@@ -10,37 +10,49 @@ import { SignUp } from "./sign-up.jsx";
 import "./index.css";
 import MyCart from "./my-cart.jsx";
 import Item from "./item.jsx";
+import AddItemFormik from "./add-item-formik.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
+    element: <App title="Give-Away! - Discover hot Deals For Free!" />,
+    errorElement: <ErrorPage title="Error!" />,
   },
 
   {
     path: "/item-details/:id",
-    element: <ItemDetails />,
+    element: <ItemDetails title="Give-Away! - About Item" hasLoaded={false} />,
+    errorElement: <ErrorPage title="Error!"/>,
   },
 
   {
     path: "/add-item",
-    element: <AddItem />,
+    element: <AddItem title="Give-Away! - Add Item" />,
+    errorElement: <ErrorPage title="Error!"/>,
+  },
+
+  {
+    path: "/add-item-formik",
+    element: <AddItemFormik title="Give-Away! - Add Item" />,
+    errorElement: <ErrorPage title="Error!"/>,
   },
 
   {
     path: "auth/login",
-    element: <Login />,
+    element: <Login title="Give-Away! - Login" />,
+    errorElement: <ErrorPage title="Error!"/>,
   },
 
   {
     path: "/sign-up",
-    element: <SignUp />,
+    element: <SignUp title="Give-Away! - Sign-up" />,
+    errorElement: <ErrorPage title="Error!"/>,
   },
 
   {
     path: "/my-cart",
-    element: <MyCart />,
+    element: <MyCart title="Give-Away! - My Cart" />,
+    errorElement: <ErrorPage title="Error!"/>,
   },
 ]);
 

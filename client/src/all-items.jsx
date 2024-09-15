@@ -24,6 +24,8 @@ export const singleItem = {
   description: "",
 };
 
+
+
 export const allItems = [
   {
     id: 1,
@@ -58,7 +60,15 @@ export const allItems = [
     id: 5,
     name: "Versace Womens Sport Tech Stainless Steel 40mm Strap Fashion Watch",
     url: "https://i.ebayimg.com/images/g/zNEAAOSwZo9mfuv9/s-l1600.webp",
-    condition: "open box",
+    condition: "Open Box",
     description: "So beautiful!",
+  },
+
+  {
+    id: 6,
+    name: "Amazon Essentials Men's Easy to Read Strap Watch",
+    url: "https://m.media-amazon.com/images/I/81SkKZjDDyL._AC_SY550_.jpg",
+    condition: "Open Box",
+    description: "You will Look fantastic with this beautiful Watch!",
   },
 ];

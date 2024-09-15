@@ -1,10 +1,16 @@
 import logo from "./assets/logo.svg";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import Item from "./item";
 
-export default function MyCart() {
+export default function MyCart(props) {
+  function ChangePageTitle() {
+    document.title = props.title;
+  }
+
+  useEffect(() => ChangePageTitle, []);
+
   const navigate = useNavigate();
   const location = useLocation();
 
