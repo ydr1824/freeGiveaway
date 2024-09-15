@@ -1,9 +1,5 @@
-# Ignore VSCode launch configurations
 .vscode/*
 !.vscode/tasks.json
-
-# Ignore environment variable files
 server/.env
-
-# Ignore Node.js modules
+server/package-lock.json
 server/node_modules/

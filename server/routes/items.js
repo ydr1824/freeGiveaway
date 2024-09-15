@@ -48,6 +48,16 @@ router.post('/', async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+router.patch('/:id', async (req, res) => {
+  try {
+    const itemId = req.params.id;
+    console.log(req.body)
+    const item = await updateItemStatus(itemId,req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 
 // Upload an image for an item
 router.post('/upload/:id', upload.single('image'), async (req, res) => {

@@ -29,11 +29,11 @@ export async function findAllItems() {
   }
 
   const itemList = await db.select(
-    {
-      id: items.id,
-      name: items.name,
-      condition: conditions.name
-    }
+    //{
+    //  id: items.id,
+    //  name: items.name,
+    //  condition: conditions.name
+    //}
   ).from(items)
     .leftJoin(categories, eq(items.category_id, categories.id))
     .leftJoin(conditions, eq(items.condition_id, conditions.id))
@@ -55,6 +55,20 @@ export const findItemById = async (itemId) => {
   }
 };
 
+// Function to update an item status
+export const updateItemStatus = async (itemId, status) => {
+  try {
+    const updatedItem = await db
+      .update(items)
+      .set({ status })
+      .where(eq(items.id, itemId)) 
+      .execute();
+    return updatedItem;
+  } catch (error) {
+    console.error('Error updating item status:', error);
+    throw new Error('Database update failed');
+  }
+};
 // Function to update an item with an image URL
 export const updateItemImage = async (itemId, imageUrl) => {
   try {

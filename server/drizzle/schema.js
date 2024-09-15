@@ -1,5 +1,6 @@
-import { pgTable, foreignKey, serial, integer, varchar, timestamp, text, unique } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, serial, integer, varchar, timestamp, text, unique,boolean } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
+//import { boolean } from "drizzle-orm/mysql-core";
 
 
 
@@ -32,6 +33,7 @@ export const items = pgTable("items", {
 	category_id: integer("category_id"),
 	user_id: integer("user_id").notNull(),
 	image_url: varchar("image_url", { length: 255 }),
+	active: boolean("active").default(true).notNull(),
 	created_at: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
 	updated_at: timestamp("updated_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
 	deleted_at: timestamp("deleted_at", { mode: 'string' }),

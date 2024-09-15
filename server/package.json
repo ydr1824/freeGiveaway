@@ -12,6 +12,7 @@
     "start": "node ../copySchema.js && node app.js",
     "db:generate": "drizzle-kit generate",
     "db:pull": "drizzle-kit pull",
+    "db:push": "npm run db:generate && npm run db:build",
     "db:build": "drizzle-kit migrate",
     "db:help": "drizzle-kit --help",
     "build": "node app.js",
