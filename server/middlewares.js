@@ -26,14 +26,6 @@ function verifyJWT(token) {
     return decoded;
 }
 
-// Logger Middleware
-function logger(req, res, next) {
-    if (inTesting) {
-        return next();
-    }
-    console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
-    next();
-}
 
 // JWT Authentication Middleware
 const authenticateJWT = (req, res, next) => {
@@ -53,23 +45,8 @@ const authenticateJWT = (req, res, next) => {
 };
 
 
-// Error Handling Middleware
-function errorHandler(err, req, res, next) {
-    console.error(err.stack); // Log the error stack
-    res.status(500).json({ message: 'Internal Server Error' }); // Send error response
-}
-
-// Request Time Middleware
-function requestTime(req, res, next) {
-    if (inTesting) {
-        return next();
-    }
-    req.requestTime = Date.now();
-    next();
-}
 const allowedOrigins = [
     'http://localhost:5173',
-    'http://localhost:3000',
     'null',
     // Add more origins as necessary
 ];
@@ -93,6 +70,30 @@ const corsMiddleware = (req, res, next) => {
 
 const jsonMiddleware = express.json();
 const CookieParser = cookieParser();
+// Logger Middleware
+function logger(req, res, next) {
+    if (inTesting) {
+        return next();
+    }
+    console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
+    next();
+}
+
+// Request Time Middleware
+function requestTime(req, res, next) {
+    if (inTesting) {
+        return next();
+    }
+    req.requestTime = Date.now();
+    next();
+}
+
+// Error Handling Middleware
+function errorHandler(err, req, res, next) {
+    console.error(err.stack); // Log the error stack
+    res.status(500).json({ message: 'Internal Server Error' }); // Send error response
+}
+
 
 // Order of middlewares: 
 const middlewares = [logger, requestTime, jsonMiddleware, corsMiddleware, CookieParser, errorHandler];
