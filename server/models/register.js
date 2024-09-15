@@ -1,4 +1,4 @@
-import { db, users } from '../db.js';
+import { db, users, eq } from '../db.js';
 import { hashPW, signJWT, verifyJWT } from '../middlewares.js';
 export async function createUser(userData, res) { // Add res as a parameter
   const { email, password, firstName, lastName, address, phone } = userData;
@@ -55,3 +55,27 @@ export const verifyUser = async (token) => {
     throw new Error('Invalid verification token');
   }
 };
+
+
+export async function login(email, password) {
+  // Fetch the user by email
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email)) // Only check by email first
+    .execute();
+
+  if (!user || user.length === 0) {
+    throw new Error('User not found');
+  }
+  const storedUser = user[0];
+
+  // Verify the password
+  const isPasswordValid = await hashPW(password, storedUser.password); // Adjust this line to your password verification logic
+  if (!isPasswordValid) {
+    throw new Error('Invalid password');
+  }
+  const token = signJWT({ email });
+
+  return { user: storedUser, token }; // Return user data and token
+}

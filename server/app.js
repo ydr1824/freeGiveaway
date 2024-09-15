@@ -29,6 +29,11 @@ app.post('/debug', (req, res) => {
   res.status(200).json({ message: `${debugMsg} ${debugVal}` }); //needs touch up
 });
 
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send(err);
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
