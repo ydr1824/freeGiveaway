@@ -35,41 +35,40 @@ export default function AddItemFormik(props) {
     validationSchema: itemSchema,
     onSubmit: submitHandler,
   });
-  /**
-   name,
-    description,
-    long_description: longDescription,
-    image_url: urlFileName,
-    category_id: categoryId,
-    condition_id: conditionId,
-    user_id: userId */
+
+  /* name,
+  description,
+  //long_description: longDescription,
+  image_url: urlFileName,
+  category_id: categoryId,
+  condition_id: conditionId,
+  user_id: userId,*/
 
   async function postItem(newSingleItem) {
     console.log(newSingleItem);
     try {
-      const res = await fetch("http://localhost:3000/items/", {
+      const response = await fetch("http://localhost:3000/items/", {
         method: "POST",
-        mode: "no-cors",
+
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          
           name: newSingleItem.name,
           description: newSingleItem.description,
-        
+
           image_url: newSingleItem.url,
-          category_id:2,
-          condition_id: 1,
+          category_id: 1,
+          condition_id: newSingleItem.condition,
           user_id: 1,
         }),
       });
 
-      if (!res.ok) {
-        throw new Error("Network response was not ok " + res.statusText);
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
       }
 
-      const result = await res.json();
+      const result = await response.json();
       console.log(result);
     } catch (e) {
       console.error("this is an error:", e);

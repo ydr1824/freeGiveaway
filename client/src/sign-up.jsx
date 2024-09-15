@@ -30,7 +30,7 @@ export function SignUp(props) {
   async function signUpHandler(values) {
     console.log("done")
 
-    /*const res = await fetch("http://localhost:3000/users", {
+    const res = await fetch("http://localhost:3000/users", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -46,8 +46,8 @@ export function SignUp(props) {
     });
     const result = await res.json();
     console.log(result);
-   */
-    navigate("/");
+   
+    //navigate("/");
   }
 
   return (
