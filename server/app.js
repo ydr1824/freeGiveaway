@@ -1,6 +1,7 @@
 import express from 'express';
-import middlewares from './middlewares.js'; // Adjust the path if necessary
-import routes from './routes.js'; // Import the routes
+import { middlewares } from './middlewares.js'; // Adjust the path if necessary
+import publicRoutes from './publicRoutes.js'; // Adjust the path as necessary
+import privateRoutes from './privateRoutes.js'; // Adjust the path as necessary
 
 const app = express();
 const PORT = process.env.PORT || 3000; 
@@ -13,15 +14,19 @@ app.get('/debug', (req, res) => {
 });
 // Use all middlewares except errorHandler
 middlewares.slice(1).forEach(middleware => app.use(middleware));
-// Use the routes defined in routes.js
-app.use(routes); 
+
+app.use('/', publicRoutes);
+app.use('/', privateRoutes);
+
 // Add error handling middleware at the end
 app.use(middlewares[0]); // Assuming the first middleware is the error handler
 
 // Debug POST endpoint
 app.post('/debug', (req, res) => {
-    console.log('Received request body:', JSON.stringify(req.body));
-    res.status(200).json({ message: `Debug endpoint received the data ${JSON.stringify(req.body)}` });
+  const debugMsg = `Debug endpoint received the data,`;
+  const debugVal = JSON.stringify(req.body);
+    console.log(debugMsg,debugVal);
+  res.status(200).json({ message: `${debugMsg} ${debugVal}` }); //needs touch up
 });
 
 app.listen(PORT, () => {

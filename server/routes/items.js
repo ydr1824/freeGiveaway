@@ -16,6 +16,7 @@ router.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Get all items
 router.get('/', async (req, res) => {
+  console.log('requested items')
   try {
     const itemList = await findAllItems();
     res.json(itemList);

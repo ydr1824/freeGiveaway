@@ -21,7 +21,7 @@ export async function createItem(itemData) {
 }
 
 export async function findAllItems() {
-  const countResult = await db.select().from(items); // Adjust based on your library
+  const countResult = await db.select().from(items).where(eq(items.active,true)); // Adjust based on your library
   const count = countResult.length; // Assuming it returns an array
 
   if (count === 0) {
@@ -29,11 +29,13 @@ export async function findAllItems() {
   }
 
   const itemList = await db.select(
-    //{
-    //  id: items.id,
-    //  name: items.name,
-    //  condition: conditions.name
-    //}
+    {
+      id: items.id,
+      name: items.name,
+      url: items.image_url,
+      condition: conditions.name,
+      description: items.description,
+    }
   ).from(items)
     .leftJoin(categories, eq(items.category_id, categories.id))
     .leftJoin(conditions, eq(items.condition_id, conditions.id))

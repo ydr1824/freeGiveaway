@@ -1,5 +1,31 @@
+// middlewares.js
 import express from 'express';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser'; // Import cookie-parser
+import bcrypt from 'bcryptjs';
+
+const JWT_SECRET = 'FreeGA'; // Replace with a secure secret
 const inTesting = true;
+
+// Password Hashing Functions
+async function hashPW(password) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return hashedPassword;
+}
+
+async function checkPW(password, hashedPassword) {
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    return isMatch;
+}
+function signJWT(email) {
+    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' });
+    return token;
+}
+function verifyJWT(token) {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    return decoded;
+}
+
 // Logger Middleware
 function logger(req, res, next) {
     if (inTesting) {
@@ -9,24 +35,22 @@ function logger(req, res, next) {
     next();
 }
 
-// Authentication Middleware
+// JWT Authentication Middleware
+const authenticateJWT = (req, res, next) => {
+    const token = req.cookies.token; // Get token from cookies
 
-function authenticate(req, res, next) {
-    if (inTesting) {
-        return next();
+    if (!token) {
+        return res.sendStatus(403); // Forbidden
     }
-    const token = req.headers['authorization'];
-    if (token) {
 
-        if (token === 'valid-token') {
-            next(); // User is authenticated
-        } else {
-            res.status(403).json({ message: 'Forbidden' });
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.sendStatus(403); // Forbidden
         }
-    } else {
-        res.status(401).json({ message: 'Unauthorized' });
-    }
-}
+        req.user = user; // Save user info in request
+        next();
+    });
+};
 
 
 // Error Handling Middleware
@@ -36,7 +60,6 @@ function errorHandler(err, req, res, next) {
 }
 
 // Request Time Middleware
-
 function requestTime(req, res, next) {
     if (inTesting) {
         return next();
@@ -45,9 +68,8 @@ function requestTime(req, res, next) {
     next();
 }
 
-
+// CORS Middleware
 const corsMiddleware = (req, res, next) => {
-    // Allow all origins or specify a particular one
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
@@ -59,14 +81,9 @@ const corsMiddleware = (req, res, next) => {
 };
 
 const jsonMiddleware = express.json();
+const CookieParser = cookieParser();
 
 // Order of middlewares: 
-// 1. Logger
-// 2. Request Time
-// 3. JSON Parser
-// 4. CORS
-// 5. Authentication
-// 6. Error Handler
-const middlewares = [errorHandler, logger, requestTime, jsonMiddleware, corsMiddleware, authenticate];
+const middlewares = [logger, requestTime, jsonMiddleware, corsMiddleware, CookieParser, errorHandler];
 
-export default middlewares; // Use ES module export
+export { middlewares, hashPW, checkPW, signJWT, verifyJWT, bcrypt,authenticateJWT }; // Export middlewares and utility functions
