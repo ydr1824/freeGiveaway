@@ -30,7 +30,7 @@ export function SignUp(props) {
   async function signUpHandler(values) {
     console.log("done")
 
-    const res = await fetch("http://localhost:3000/users", {
+    const res = await fetch("http://localhost:3000/register", {
       method: "POST",
       headers: {
         "Content-type": "application/json",

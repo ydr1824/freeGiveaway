@@ -19,19 +19,19 @@ if (fs.existsSync(sourceFile)) {
 
         // Compare hashes
         if (sourceHash === destHash) {
-            console.log('Files are identical. No copy needed.');
+            console.log('Loading.');
             process.exit(0); // Exit without copying
         } else {
-            console.log('Files differ. Copying the new file.');
+            console.log('Loading in a moment.');
         }
     } else {
-        console.log('Destination file does not exist. Copying the new file.');
+        console.log('Please wait while loading.');
     }
 
     // Copy the file
     fs.copyFileSync(sourceFile, destFile);
-    console.log('File copied successfully.');
+    console.log('Loading...');
 } else {
-    console.log('Source file does not exist.');
+    console.log('Schema file does not exist.');
     process.exit(1); // Exit with an error
 }

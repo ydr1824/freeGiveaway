@@ -24,19 +24,19 @@ export function Login(props) {
     console.log(email, password);
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch("http://localhost:3000/register/login", {
         method: "POST",
         //credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-           email,
-           password,
+          email,
+          password,
         }),
       });
 
-       if (!response.ok) {
+      if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
       }
 

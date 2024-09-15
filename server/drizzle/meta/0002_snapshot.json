@@ -1,6 +1,6 @@
 {
-  "id": "d8dcadf5-19f9-4830-add5-b0fb3bfa983d",
-  "prevId": "2f28fb42-2df2-44ff-82b5-cbfbf2e4e314",
+  "id": "a3a38b13-b07c-4345-9578-94d79f4aa2bf",
+  "prevId": "4bbbf137-3d0d-4521-bb26-ce1236d98c96",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -81,8 +81,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "authorid": {
-          "name": "authorid",
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -108,7 +108,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "comments_user_id_fkey": {
+          "name": "comments_user_id_fkey",
+          "tableFrom": "comments",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -213,13 +227,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "active": {
-          "name": "active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -245,23 +252,17 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "items_condition_id_fkey": {
-          "name": "items_condition_id_fkey",
-          "tableFrom": "items",
-          "tableTo": "conditions",
-          "columnsFrom": [
-            "condition_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "items_category_id_fkey": {
           "name": "items_category_id_fkey",
           "tableFrom": "items",
@@ -273,6 +274,19 @@
             "id"
           ],
           "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "items_user_id_fkey": {
+          "name": "items_user_id_fkey",
+          "tableFrom": "items",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -350,8 +364,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "author_id": {
-          "name": "author_id",
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -379,12 +393,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "Posts_author_id_Users_id_fk": {
-          "name": "Posts_author_id_Users_id_fk",
+        "posts_user_id_fkey": {
+          "name": "posts_user_id_fkey",
           "tableFrom": "posts",
           "tableTo": "users",
           "columnsFrom": [
-            "author_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -459,6 +473,19 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        },
+        "requests_userid_fkey": {
+          "name": "requests_userid_fkey",
+          "tableFrom": "requests",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -470,7 +497,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
           "notNull": true
         },
@@ -496,13 +523,13 @@
           "name": "address",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "phone": {
           "name": "phone",
           "type": "varchar(20)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
