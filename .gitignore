@@ -3,4 +3,4 @@
 server/.env
 server/package-lock.json
 server/node_modules/
-server/drizzle/
+#server/drizzle/
