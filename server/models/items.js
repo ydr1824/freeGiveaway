@@ -1,3 +1,4 @@
+import { url } from "inspector";
 import { eq, db, and, items, categories, conditions, users } from "../db.js";
 
 export async function createItem(itemData) {
@@ -6,6 +7,35 @@ export async function createItem(itemData) {
     description,
     longDescription,
     urlFileName,
+    expiryDate,
+    categoryId,
+    conditionId,
+    userId,
+  } = itemData;
+  const values = {
+    name :name,
+    description: description,
+    long_description: longDescription,
+    image_url: urlFileName,
+    category_id: categoryId,
+    condition_id: conditionId,
+    user_id: userId,
+  };
+  console.log(values);
+  const item = await db
+    .insert(items)
+    .values(itemData)
+    .returning({ id: users.id });
+  console.log(item);
+  return item;
+}
+/*
+export async function createItem(itemData) {
+  const {
+    name,
+    description,
+    //longDescription,
+    urlFileName,
     categoryId,
     conditionId,
     userId,
@@ -13,7 +43,7 @@ export async function createItem(itemData) {
   const values = {
     name,
     description,
-    long_description: longDescription,
+    //long_description: longDescription,
     image_url: urlFileName,
     category_id: categoryId,
     condition_id: conditionId,
@@ -25,9 +55,35 @@ export async function createItem(itemData) {
     .returning({ id: users.id });
   console.log(item);
   return item;
-}
-
+}*/
+/*
 export async function findAllItems() {
+  const countResult = await db
+    .select()
+    .from(items)
+    .where(eq(items.active, true)); // Adjust based on your library
+  const count = countResult.length; // Assuming it returns an array
+
+  if (count === 0) {
+    return []; // Return an empty array if no records exist
+  }
+
+  const itemList = await db
+    .select({
+      id: items.id,
+      name: items.name,
+      url: items.image_url,
+      condition: conditions.name,
+      description: items.description,
+    })
+    .from(items)
+    //.leftJoin(categories, eq(items.category_id, categories.id))
+    .leftJoin(conditions, eq(items.condition_id, conditions.id))
+    //.leftJoin(users, eq(items.user_id, users.id));
+  return itemList;
+}*/
+
+/*export async function findAllItems() {
   const countResult = await db.select().from(items); // Adjust based on your library
   const count = countResult.length; // Assuming it returns an array
 
@@ -36,24 +92,49 @@ export async function findAllItems() {
   }
 
   const itemList = await db
-    .select(/*{
-      id: items.id,
-      name: items.name,
-      condition: conditions.name,
-    }*/)
+    .select({
+      
+    })
     .from(items)
     .where(eq(items.active, true))
     //.leftJoin(categories, eq(items.category_id, categories.id))
-    .leftJoin(conditions, eq(items.condition_id, conditions.id))
-   // .leftJoin(users, eq(items.user_id, users.id));
-  return itemList.map((item)=>({
+    .leftJoin(conditions, eq(items.condition_id, conditions.id));
+  // .leftJoin(users, eq(items.user_id, users.id));
+  return itemList.map((item) => ({
     id: item.items.id,
     name: item.items.name,
     url: item.items.image_url,
     condition: item.conditions.name,
     description: item.items.description,
   }));
+}*/
+
+export async function findAllItems() {
+  const countResult = await db
+    .select()
+    .from(items)
+    .where(eq(items.active, true)); // Adjust based on your library
+  const count = countResult.length; // Assuming it returns an array
+
+  if (count === 0) {
+    return []; // Return an empty array if no records exist
+  }
+
+  const itemList = await db
+    .select({
+      id: items.id,
+      name: items.name,
+      url: items.image_url,
+      condition: conditions.name,
+      description: items.description,
+    })
+    .from(items)
+    .leftJoin(categories, eq(items.category_id, categories.id))
+    .leftJoin(conditions, eq(items.condition_id, conditions.id))
+    .leftJoin(users, eq(items.user_id, users.id));
+  return itemList;
 }
+
 export const findItemById = async (itemId) => {
   console.error(itemId);
   try {

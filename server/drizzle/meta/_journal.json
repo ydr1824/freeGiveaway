@@ -15,6 +15,34 @@
       "when": 1726370664191,
       "tag": "0001_mature_talkback",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1726415711424,
+      "tag": "0002_chubby_xavin",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1726416113285,
+      "tag": "0003_flowery_purifiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1726419769779,
+      "tag": "0004_silky_skaar",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1726420786126,
+      "tag": "0005_chubby_steel_serpent",
+      "breakpoints": true
     }
   ]
 }

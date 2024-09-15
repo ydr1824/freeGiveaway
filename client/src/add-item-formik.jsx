@@ -59,7 +59,7 @@ export default function AddItemFormik(props) {
 
           image_url: newSingleItem.url,
           category_id: 1,
-          condition_id: newSingleItem.condition,
+          condition_id: 1,
           user_id: 1,
         }),
       });

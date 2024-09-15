@@ -5,11 +5,11 @@ export async function createUser(userData) {
   //console.log(userData)
   let name = `${firstName} ${lastName}`;
   const user = await db.insert(users).values({
-    id,
+    //id,
     email,
     password,
     name,
-    address,
+    //address,
     phone
   }).returning();
   return user;

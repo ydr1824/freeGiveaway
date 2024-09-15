@@ -28,7 +28,7 @@ export const items = pgTable("items", {
 	id: serial("id").primaryKey().notNull(),
 	name: varchar("name", { length: 255 }).notNull(),
 	description: text("description").notNull(),
-	condition_id: integer("condition_id"),
+	condition_id: varchar("condition_id"),
 	category_id: integer("category_id"),
 	user_id: integer("user_id").notNull(),
 	image_url: varchar("image_url", { length: 255 }),
