@@ -1,0 +1,1 @@
+ALTER TABLE "items" ALTER COLUMN "condition_id" SET DATA TYPE varchar;
