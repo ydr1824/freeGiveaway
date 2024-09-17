@@ -1,6 +1,6 @@
 import { db, requests, users, items } from '../db.js';
 
-export async function createRequest(requestData) {
+export async function createRequest(requestData,user) {
   const { userId, itemId, message, status } = requestData;
   const request = await db.insert(requests).values({
     user_id: userId,

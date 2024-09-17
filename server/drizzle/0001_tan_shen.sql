@@ -1,14 +1,31 @@
-
-CREATE SCHEMA IF NOT EXISTS free_give_away AUTHORIZATION retool;
-
-CREATE TABLE IF NOT EXISTS "requests" (
+CREATE TABLE IF NOT EXISTS "categories" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"itemid" integer NOT NULL,
-	"userid" integer NOT NULL,
-	"status" varchar(50) DEFAULT 'pending',
+	"name" varchar(255) NOT NULL,
+	"description" text NOT NULL,
+	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp,
+	"deleted_at" timestamp,
+	CONSTRAINT "categories_name_key" UNIQUE("name")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "comments" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"content" text NOT NULL,
+	"postid" integer NOT NULL,
+	"user_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"updated_at" timestamp,
 	"deleted_at" timestamp
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "conditions" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" varchar(255) NOT NULL,
+	"description" text NOT NULL,
+	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp,
+	"deleted_at" timestamp,
+	CONSTRAINT "conditions_name_key" UNIQUE("name")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "items" (
@@ -26,16 +43,6 @@ CREATE TABLE IF NOT EXISTS "items" (
 	"active" boolean DEFAULT true NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "comments" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"content" text NOT NULL,
-	"postid" integer NOT NULL,
-	"authorid" integer NOT NULL,
-	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp,
-	"deleted_at" timestamp
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "postcategories" (
 	"postid" integer NOT NULL,
 	"categoryid" integer NOT NULL,
@@ -43,27 +50,28 @@ CREATE TABLE IF NOT EXISTS "postcategories" (
 	"deleted_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "categories" (
+CREATE TABLE IF NOT EXISTS "posts" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(255) NOT NULL,
-	"description" text NOT NULL,
+	"title" varchar(255) NOT NULL,
+	"content" text NOT NULL,
+	"user_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp,
-	"deleted_at" timestamp,
-	CONSTRAINT "categories_name_key" UNIQUE("name")
+	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "conditions" (
+CREATE TABLE IF NOT EXISTS "requests" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(255) NOT NULL,
-	"description" text NOT NULL,
+	"itemid" integer NOT NULL,
+	"userid" integer NOT NULL,
+	"status" varchar(50) DEFAULT 'pending',
 	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"updated_at" timestamp,
-	"deleted_at" timestamp,
-	CONSTRAINT "conditions_name_key" UNIQUE("name")
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
+	"id" serial PRIMARY KEY NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"password" varchar(255) NOT NULL,
 	"name" varchar(255) NOT NULL,
@@ -72,12 +80,11 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
 	"deleted_at" timestamp,
-	"id" serial NOT NULL,
 	CONSTRAINT "Users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "requests" ADD CONSTRAINT "requests_itemid_fkey" FOREIGN KEY ("itemid") REFERENCES "public"."items"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "comments" ADD CONSTRAINT "comments_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -95,8 +102,31 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "items" ADD CONSTRAINT "items_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "postcategories" ADD CONSTRAINT "postcategories_categoryid_fkey" FOREIGN KEY ("categoryid") REFERENCES "public"."categories"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
-
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "posts" ADD CONSTRAINT "posts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "requests" ADD CONSTRAINT "requests_itemid_fkey" FOREIGN KEY ("itemid") REFERENCES "public"."items"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "requests" ADD CONSTRAINT "requests_userid_fkey" FOREIGN KEY ("userid") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;

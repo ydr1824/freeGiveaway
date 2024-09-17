@@ -1,16 +1,23 @@
 import { Router } from 'express';
 import { createUser, verifyUser ,login} from '../models/register.js'; // Import verifyUser
-
+import { signJWT, setCookie } from '../middlewares.js';
 
 const router = Router();
 
 router.post('/', async (req, res) => {
   try {
-    const user = await createUser(req.body, res); // Pass res to createUser
-    // If createUser returns a response, it will be sent here
+    const { id } = await createUser(req.body, res); // Pass res to createUser
+    // Generate verification token
+    const token = signJWT({ id });
+
+    // Set the token in a cookie
+    setCookie(res, token);
+
+    // Return user information (excluding password)
+    res.status(201).json({ id });
   } catch (err) {
     let msg = err.message;
-    console.error(error);
+    console.error(msg);
     res.status(400).json({ message: msg });
   }
 });
@@ -47,9 +54,6 @@ router.post('/login', async (req, res) => {
     res.json({ user });
   } catch (err) {
     let msg = err.message;
-    if (msg.includes("User not found")) {
-      return res.status(404).json({ message: msg });
-    }
     res.status(500).json({ message: msg });
   }
 });

@@ -24,7 +24,7 @@ export function Login(props) {
     console.log(email, password);
 
     try {
-      const response = await fetch("http://localhost:3000/register/login", {
+      const response = await fetch("http://localhost:3000/login", {
         method: "POST",
         //credentials: "include",
         headers: {

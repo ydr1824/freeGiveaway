@@ -2,10 +2,10 @@ import dotenv from 'dotenv';
 import { drizzle }  from "drizzle-orm/postgres-js";
 import * as schema from './drizzle/schema.js'; 
 import { sql, eq } from 'drizzle-orm';
-import Client from 'postgres'
+import postgresClient from 'postgres'
 dotenv.config();
 let client;
-client = Client(process.env.DATABASE_URL)
+client = postgresClient(process.env.DATABASE_URL)
 
 
 function toBool(value) {
